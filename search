@@ -6,8 +6,9 @@ list_file="list.txt"
 alias_file="$HOME/.$this_file"
 
 
-# UNINSTALL COMMAND: "u"
-if [ $1 == "u" ] || [ $1 == "-u" ]
+
+# UNINSTALL COMMAND "u"
+if [ ""$1 == "u" ] || [ ""$1 == "-u" ]
 then
         echo "Uninstalling... :("
         rm $alias_file 2> /dev/null
@@ -19,8 +20,12 @@ fi
 # INSTALLATION OF ALIAS
 if [ -r $alias_file ] && [ -s $alias_file ]
 then
-        # The file ~/.$alias_file does not exists.
-	:
+        # The file ~/.$alias_file exists.
+	# If there are no parameters, exit.
+	if [ -z $1 ]
+	then
+		exit
+	fi
 else
         echo "The "$alias_file" file does not exists. Installing "$this_file" alias in ~/.bashrc."
 	echo 'alias '$this_file'='$alias_file >> ~/.bashrc
