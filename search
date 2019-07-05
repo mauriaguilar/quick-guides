@@ -28,7 +28,7 @@ then
 		exit
 	fi
 else
-        echo "The "$alias_file" file does not exists. Installing "$this_file" alias in ~/.bashrc."
+        echo "The "$alias_file" file does not exists. Installing "$this_file" alias in ~/.bashrc :)"
 	echo 'alias '$this_file'='$alias_file >> ~/.bashrc
 	cp $this_file $alias_file
 	chmod u+r+w+x $alias_file
@@ -44,9 +44,10 @@ then
 	echo "   Recursively search the files in this folder that contain all the terms. The results go to "$list_file"."
 	echo "   In the next search, look over the files of the previous result. The results go to "$list_file" again."
 	echo "   parameters:"
-	echo "          u, -u Uninstall alias. (optional). "
+	echo "          u, -u Uninstall alias. "
 	echo "          r, -r Remove previous result and Search recursively in this folder as the first time. (optional). "
-	echo "          h, -h this help"
+	echo "          p, -p Print all results. (optional). "
+	echo "          h, -h this help."
 	exit
 fi
 
@@ -67,25 +68,49 @@ then
 fi
 
 
+# OPTIONAL PRINT COMMAND: "p"
+PRINT_ALL_RESULTS=""
+if [ $1 == "p" ] || [ $1 == "-p" ]
+then
+	PRINT_ALL_RESULTS=true
+	shift
+fi
+
+
 #  SINGLE SEARCH FUNCTION
 function search()
 {
 	if [ -r $list_file ] && [ -s $list_file ]
 	then
-	        echo "Searching again. (The "$list_file" file exists)"
+	        #echo "Searching again. (The "$list_file" file exists)"
 		grep -e $1 $(cat $list_file) -l > $list_file
 	else
-		echo "Searching for the first time. (The "$list_file" file does not exist or is empty)"
+		#echo "Searching for the first time. (The "$list_file" file does not exist or is empty)"
 		grep -e $1 -r ./ -l > $list_file
 	fi
-	cat $list_file
+	if [ $PRINT_ALL_RESULTS ]
+	then
+		cat $list_file
+	fi
 }
 
 
 # RECURSIVE SEARCH
 while [ $1 ]
 do
-	echo "Searching "\"$1\"" ------------------------------"
+	if [ $PRINT_ALL_RESULTS ]
+	then
+		echo "------------------------------"
+		echo " Searching "\"$1\"
+		echo "------------------------------"
+	fi
 	search $1
 	shift
 done
+
+# Print final result
+if [ -z $PRINT_ALL_RESULTS ]
+then
+	cat $list_file
+fi
+
