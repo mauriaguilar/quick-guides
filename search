@@ -24,6 +24,7 @@ then
 	# If there are no parameters, exit.
 	if [ -z $1 ]
 	then
+		echo "Nothing to do."
 		exit
 	fi
 else
