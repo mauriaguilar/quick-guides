@@ -1,4 +1,6 @@
 #!/bin/bash
+# version: 0.3
+# author: github.com/mauriaguilar
 
 # CONFIGURATION
 this_file="search" # name of this file
@@ -39,24 +41,22 @@ fi
 # HELP COMMAND: "h"
 if [ $1 == "h" ] || [ $1 == "-h" ]
 then
-	echo "Use: "$this_file" [term1 ... termN] Search one or multiple terms in the files in this folder, recursively, one at a time."
+	echo "Use: "$this_file" term1 ... termN [u | h] [k p]"
+	echo "Search one or multiple terms in the files in this folder, recursively, one at a time."
 	echo "   How works:"
 	echo "   Recursively search the files in this folder that contain all the terms. The results go to "$list_file"."
 	echo "   In the next search, look over the files of the previous result. The results go to "$list_file" again."
 	echo "   parameters:"
 	echo "          u, -u Uninstall alias. "
-	echo "          r, -r Remove previous result and Search recursively in this folder as the first time. (optional). "
+	echo "          k, -k Keep previous result and search in the files of the "$list_file" file. (optional). "
 	echo "          p, -p Print all results. (optional). "
-	echo "          h, -h this help."
+	echo "          h, -h Print this help."
 	exit
 fi
 
-
-# OPTIONAL REMOVE COMMAND: "r"
-if [ $1 == "r" ] || [ $1 == "-r" ]
-then
-	echo "Removing the "$list_file" file."
-        rm $list_file
+# CHECK TERMS TO SEARCH
+function check_terms()
+{
 	if [ $2 ]
 	then
 		# Shift optional parameter to search.
@@ -65,6 +65,16 @@ then
 		echo "Nothing to search."
 		exit
 	fi
+}
+
+
+# OPTIONAL KEEP COMMAND: "r"
+if [ $1 == "k" ] || [ $1 == "-k" ]
+then
+	echo "Keeping previous result."
+	check_terms
+else
+        rm $list_file 2> /dev/null
 fi
 
 
@@ -73,11 +83,11 @@ PRINT_ALL_RESULTS=""
 if [ $1 == "p" ] || [ $1 == "-p" ]
 then
 	PRINT_ALL_RESULTS=true
-	shift
+	check_terms
 fi
 
 
-#  SINGLE SEARCH FUNCTION
+# SINGLE SEARCH FUNCTION
 function search()
 {
 	if [ -r $list_file ] && [ -s $list_file ]
