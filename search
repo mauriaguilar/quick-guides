@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# CONFIGURATION
+this_file="search" # name of this file
+list_file="list.txt"
+
+
+# INSTALLATION OF ALIAS
+alias_file="$HOME/.$this_file"
+if [ -r $alias_file ] && [ -s $alias_file ]
+then
+        # The file ~/.$alias_file does not exists.
+	:
+else
+        echo "The "$alias_file" file does not exists. Installing search alias in ~/.bashrc."
+	echo 'alias '$this_file'='$alias_file >> ~/.bashrc
+	cp $this_file $alias_file
+	chmod u+r+w+x $alias_file
+	exit
+fi
+
+
+# HELP COMMAND: "h"
+if [ $1 == "h" ] || [ $1 == "-h" ]
+then
+	echo "Use: "$this_file" [term] Search multiple terms in the files in this folder, recursively, one at a time."
+	echo "   How works:"
+	echo "   Search the term in this folder recursively the first time. The results go to "$file_list"."
+	echo "   Search for the term in the "$list_file" file. The results go to "$file_list" again."
+	echo "   parameters:"
+	echo "          r, -r Recursive Search in this folder as the first time. (optional). "
+	echo "          h, -h this help"
+	exit
+fi
+
+
+# OPTIONAL RECURSIVE SEARCH COMMAND: "r"
+if [ $1 == "r" ] || [ $1 == "-r" ]
+then
+	echo "Deleting "$list_file" file."
+        rm $list_file
+	if [ -z $2 ]
+	then
+		echo "Nothing to search."
+		exit
+	else
+		# Shift optional parameter to search.
+		shift
+	fi
+fi
+
+
+#  BUSQUEDA
+if [ -r $list_file ] && [ -s $list_file ]
+then
+        echo "The "$list_file" file exists. Searching again."
+	grep -e $1 $(cat $list_file) -l > $list_file
+else
+	echo "The "$list_file" file does not exist. Searching for the first time."
+	grep -e $1 -r ./ -l > $list_file
+fi
+cat $list_file
