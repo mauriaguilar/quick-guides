@@ -17,4 +17,4 @@ for file in ls():
       new_name = str(CURRENT_VALUE)+EXTENSION_DEST
       print(file + " --> " + new_name)
       rename(RELATIVE_PATH + "/" + file,RELATIVE_PATH + "/" + new_name)
-      CURRENT_VALUE += 2
+      CURRENT_VALUE += STEP
