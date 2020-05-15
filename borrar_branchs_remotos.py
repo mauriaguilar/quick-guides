@@ -1,5 +1,4 @@
-# Este script elimina todos los branchs remotos excepto master, releases y los de la lista branches_a_dejar
-from subprocess import call
+# Este script elimina todos los branchs remotos excepto master y los de la lista BRANCHES_A_DEJAR
 
 # 0) CONFIGURACION
 # Branches o patrones de nombres que No se deben borrar
@@ -18,6 +17,8 @@ BRANCHES_A_DEJAR = [
 TAMANIO_BLOQUE_COMANDOS = 30
 
 
+# ---------------------------------------------------------------------
+from subprocess import call
 
 # Funcion de ejecución por consola
 def run(comando):
@@ -25,6 +26,7 @@ def run(comando):
     call(comando, shell=True)
 
 # 1) Obtener todos los cambios
+run("git stash")
 run("git fetch --all")
 
 # 2) Ubicarse en master
@@ -67,8 +69,9 @@ for branch in branches_a_borrar:
     if contador_comandos % cantidad_branches_eliminar == 0 or branch == branches_a_borrar[-1]:
         # Imprimo el bloque de comandos a ejecutar
         print("\n\nBorrar branches remotos con el bloque de comandos: ")
-        for comando in bloque_comandos:
-            print(comando)
+        for nro in range(len(bloque_comandos)):
+            bloque_comandos[nro] = bloque_comandos[nro].replace("remotes/origin/", "origin ")
+            print(bloque_comandos[nro])
         # Consulto al usuario si desea ejecutar la lista de comandos
         print("Ejecutar este bloque de comandos? (Enter para Confirmar, No para Omitir, S para Salir): ", end="")
         respuesta = input()
@@ -81,7 +84,7 @@ for branch in branches_a_borrar:
                 print("->", end="")
                 contador_branches_eliminados += 1
                 # Elimino branch remoto
-                #run(comando)
+                run(comando)
         else:
             print("Bloque de comandos No ejecutado. ("+respuesta+") <-<-<-<-<-")
         # Reseteo variables ciclicas
