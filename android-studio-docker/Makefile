@@ -30,3 +30,12 @@ res:
 
 in:
 	docker exec -it editor bash
+
+check-virtualization:
+	grep -E --color=auto 'vmx|svm' /proc/cpuinfo
+
+fix-virtualization:
+	sudo usermod -aG kvm root
+	sudo chown root:root -R /dev/kvm
+	sudo chmod 777 /dev/kvm
+
