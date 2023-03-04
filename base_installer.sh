@@ -17,3 +17,4 @@ sudo apt-get update -y
 sudo apt-get install -y obs-studio
 
 
+# sudo snap install postman
