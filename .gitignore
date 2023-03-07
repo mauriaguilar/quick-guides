@@ -1,8 +1,7 @@
 list.txt
 *.deb*
-android-studio-docker/android-studio-*/
-android-studio-docker/*.tar.gz
-android-studio-docker/root
-android-studio-docker/dev
-android-studio-docker/studio.log
+android-studio/android-studio-*/
+android-studio/*.tar.gz
+android-studio/root
+android-studio/studio.log
 
