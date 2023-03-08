@@ -19,6 +19,7 @@ run: del
 	 -v $(ANDROID_ROOT):/android-studio \
 	 -v $(PWD)/$(USER)/Android:/$(USER)/Android \
 	 -v $(PWD)/$(USER)/AndroidStudioProjects:/$(USER)/AndroidStudioProjects \
+	 -v $(PWD)/$(USER)/StudioProjects:/$(USER)/StudioProjects \
 	 -v $(PWD)/$(USER)/Sdk:/$(USER)/Sdk \
 	 -v $(PWD)/$(USER)/.android:/$(USER)/.android \
 	 -v $(PWD)/$(USER)/.cache:/$(USER)/.cache \
