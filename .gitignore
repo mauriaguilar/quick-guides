@@ -4,4 +4,5 @@ android-studio/android-studio-*/
 android-studio/*.tar.gz
 android-studio/root
 android-studio/studio.log
-
+ckd/data
+ckd/infrastructure

@@ -9,8 +9,8 @@ USER=root
 
 run: del
 	xhost +
-	# echo 'export PATH="$$PATH:/flutter/bin"' >> $(USER)/.bashrc
-	# echo 'export PATH="$$PATH:/android-studio"' >> $(USER)/.bashrc
+	@# echo 'export PATH="$$PATH:/flutter/bin"' >> $(USER)/.bashrc
+	@# echo 'export PATH="$$PATH:/android-studio"' >> $(USER)/.bashrc
 	docker run -it --name=editor \
 	 --net=host --env="DISPLAY" -d --privileged --volume="$(HOME)/.Xauthority:/root/.Xauthority:rw" -v /tmp/.X11-unix:/tmp/.Y11-unix \
 	 -v /dev/kvm:/dev/kvm \
