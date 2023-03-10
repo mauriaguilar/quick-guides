@@ -21,9 +21,11 @@ def get_folders_with_many_files(root_path, threshold, level=3):
     return folders
 
 root_path = "./"
-threshold = 5000
+threshold = 3000
 level=3
 folders_with_many_files = get_folders_with_many_files(root_path, threshold, level=level)
+
+
 print("List of files with more than " + str(threshold) + " files on level " + str(level) + ":")
 for key, value in folders_with_many_files.items():
     print(key + ": " + str(value))
