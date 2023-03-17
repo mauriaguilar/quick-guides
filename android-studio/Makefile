@@ -1,16 +1,18 @@
+ANDROID_STUDIO_VERSION=2022.1.1.21
+
+
+
 IMAGE=android
-VERSION=2022
-ANDROID_FOLDER=android-studio-2022.1.1.21-linux
-ANDROID_ROOT=$(PWD)/$(ANDROID_FOLDER)/android-studio
-COMMAND=/android-studio/bin/studio.sh 
+VERSION=$(ANDROID_STUDIO_VERSION)
+ANDROID_NAME=android-studio-$(ANDROID_STUDIO_VERSION)-linux
+ANDROID_ROOT=$(HOME)/Downloads/android-studio
+COMMAND=/android-studio/bin/studio.sh
 UID=$(shell id -u)
 USER=root
 
 
 run: del
 	xhost +
-	@# echo 'export PATH="$$PATH:/flutter/bin"' >> $(USER)/.bashrc
-	@# echo 'export PATH="$$PATH:/android-studio"' >> $(USER)/.bashrc
 	docker run -it --name=editor \
 	 --net=host --env="DISPLAY" -d --privileged --volume="$(HOME)/.Xauthority:/root/.Xauthority:rw" -v /tmp/.X11-unix:/tmp/.Y11-unix \
 	 -v /dev/kvm:/dev/kvm \
@@ -37,6 +39,7 @@ check:
 	docker run -it --rm $(IMAGE):$(VERSION) bash
 
 build:
+	cd $(HOME)/Downloads && tar -xzvf $(ANDROID_NAME).tar.gz
 	docker build . -t $(IMAGE):$(VERSION)
 	@mkdir -p $(USER) && echo "build finished."
 
