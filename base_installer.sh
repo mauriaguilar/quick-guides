@@ -5,7 +5,7 @@
 sudo apt-get update -y
 
 echo "common apps..." && sleep 5
-sudo apt-get install -y git terminator htop gparted
+sudo apt-get install -y git terminator htop gparted make
 
 echo "email?: " && read email && git config --global user.email "$email"
 git config --global user.name "Mauricio Aguilar"
@@ -24,3 +24,9 @@ sudo apt install ./google-chrome-stable_current_amd64.deb
 echo "Visual Studio: https://code.visualstudio.com/download"
 #sudo dpkg -i *.deb
 
+echo "Docker: https://docs.docker.com/engine/install/ubuntu/"
+
+
+sudo add-apt-repository ppa:maarten-baert/simplescreenrecorder
+sudo apt update
+sudo apt install simplescreenrecorder

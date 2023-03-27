@@ -1,15 +1,15 @@
 ANDROID_STUDIO_VERSION=2022.1.1.21
 
 
-
 IMAGE=android
 VERSION=$(ANDROID_STUDIO_VERSION)
 ANDROID_NAME=android-studio-$(ANDROID_STUDIO_VERSION)-linux
+FILE=$(HOME)/Downloads/$(ANDROID_NAME).tar.gz
 ANDROID_ROOT=$(HOME)/Downloads/android-studio
 COMMAND=/android-studio/bin/studio.sh
 UID=$(shell id -u)
 USER=root
-
+DATA_FOLDER=$(HOME)/Android
 
 run: del
 	xhost +
@@ -19,16 +19,16 @@ run: del
 	 -v /dev/bus/usb:/dev/bus/usb \
 	 -u $(USER) \
 	 -v $(ANDROID_ROOT):/android-studio \
-	 -v $(PWD)/$(USER)/Android:/$(USER)/Android \
-	 -v $(PWD)/$(USER)/AndroidStudioProjects:/$(USER)/AndroidStudioProjects \
-	 -v $(PWD)/$(USER)/StudioProjects:/$(USER)/StudioProjects \
-	 -v $(PWD)/$(USER)/Sdk:/$(USER)/Sdk \
-	 -v $(PWD)/$(USER)/.android:/$(USER)/.android \
-	 -v $(PWD)/$(USER)/.cache:/$(USER)/.cache \
-	 -v $(PWD)/$(USER)/.config:/$(USER)/.config \
-	 -v $(PWD)/$(USER)/.java:/$(USER)/.java \
-	 -v $(PWD)/$(USER)/.local:/$(USER)/.local \
-	 -v $(PWD)/$(USER)/.pub-cache:/$(USER)/.pub-cache \
+	 -v $(DATA_FOLDER)/Android:/$(USER)/Android \
+	 -v $(DATA_FOLDER)/AndroidStudioProjects:/$(USER)/AndroidStudioProjects \
+	 -v $(DATA_FOLDER)/StudioProjects:/$(USER)/StudioProjects \
+	 -v $(DATA_FOLDER)/Sdk:/$(USER)/Sdk \
+	 -v $(DATA_FOLDER)/.android:/$(USER)/.android \
+	 -v $(DATA_FOLDER)/.cache:/$(USER)/.cache \
+	 -v $(DATA_FOLDER)/.config:/$(USER)/.config \
+	 -v $(DATA_FOLDER)/.java:/$(USER)/.java \
+	 -v $(DATA_FOLDER)/.local:/$(USER)/.local \
+	 -v $(DATA_FOLDER)/.pub-cache:/$(USER)/.pub-cache \
 	 $(IMAGE):$(VERSION) $(COMMAND)
 
 
@@ -38,10 +38,17 @@ run: del
 check:
 	docker run -it --rm $(IMAGE):$(VERSION) bash
 
-build:
-	cd $(HOME)/Downloads && tar -xzvf $(ANDROID_NAME).tar.gz
+extract:
+	@echo "Extract Android Studio from: $(FILE)"
+	@if test -f "$(FILE)"; then \
+	    echo "Android Studio has already been extracted."; \
+	else \
+	    cd $(HOME)/Downloads && tar -xzvf $(ANDROID_NAME).tar.gz; \
+	fi
+
+build: extract
 	docker build . -t $(IMAGE):$(VERSION)
-	@mkdir -p $(USER) && echo "build finished."
+	@mkdir -p $(DATA_FOLDER) && echo "build finished."
 
 b: build
 
